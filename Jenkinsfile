@@ -26,32 +26,32 @@ pipeline {
 
         stage('Build & Tag Docker Images') {
             steps {
-                sh """
+                sh '''
                     for svc in ${SERVICES}; do
-                        echo "Building \$svc..."
-                        docker build -t ${ECR_REGISTRY}/\$svc:${IMAGE_TAG} -t ${ECR_REGISTRY}/\$svc:latest ./services/\$svc
+                        echo "Building ${svc}..."
+                        docker build -t ${ECR_REGISTRY}/${svc}:${IMAGE_TAG} -t ${ECR_REGISTRY}/${svc}:latest ./services/${svc}
                     done
-                """
+                '''
             }
         }
 
         stage('Authenticate & Push to ECR') {
             steps {
-                sh """
+                sh '''
                     aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
                     for svc in ${SERVICES}; do
-                        echo "Pushing \$svc..."
-                        docker push ${ECR_REGISTRY}/\$svc:${IMAGE_TAG}
-                        docker push ${ECR_REGISTRY}/\$svc:latest
+                        echo "Pushing ${svc}..."
+                        docker push ${ECR_REGISTRY}/${svc}:${IMAGE_TAG}
+                        docker push ${ECR_REGISTRY}/${svc}:latest
                     done
-                """
+                '''
             }
         }
 
         stage('Deploy to EC2') {
             steps {
                 sshagent(['ec2-ssh-key']) {
-                    sh """
+                    sh '''
                         ssh -o StrictHostKeyChecking=no ubuntu@${EC2_IP} "mkdir -p ~/app/nginx"
                         scp -o StrictHostKeyChecking=no docker/docker-compose.prod.yml ubuntu@${EC2_IP}:~/app/docker-compose.yml
                         scp -o StrictHostKeyChecking=no docker/nginx/nginx.conf ubuntu@${EC2_IP}:~/app/nginx/nginx.conf
@@ -63,17 +63,17 @@ pipeline {
                             docker compose pull
                             docker compose up -d --remove-orphans
                         "
-                    """
+                    '''
                 }
             }
         }
 
         stage('Health Check') {
             steps {
-                sh """
+                sh '''
                     sleep 10
                     curl -f -s http://${EC2_IP}/health || exit 1
-                """
+                '''
             }
         }
     }
@@ -83,7 +83,7 @@ pipeline {
             cleanWs()
         }
         failure {
-            echo "Pipeline run failed. Check container logs."
+            echo "Pipeline run failed. Check container logs on EC2."
         }
     }
 }
