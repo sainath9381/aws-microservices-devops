@@ -29,7 +29,7 @@ pipeline {
                 sh '''
                     for svc in ${SERVICES}; do
                         echo "Building ${svc}..."
-                        docker build -t ${ECR_REGISTRY}/${svc}:${IMAGE_TAG} -t ${ECR_REGISTRY}/${svc}:latest ./services/${svc}
+                        docker build --no-cache -t ${ECR_REGISTRY}/${svc}:${IMAGE_TAG} -t ${ECR_REGISTRY}/${svc}:latest ./services/${svc}
                     done
                 '''
             }
