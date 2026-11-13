@@ -21,7 +21,7 @@ services:
       - app-network
 
   user-service:
-    image: 542551366580.dkr.ecr.us-east-1.amazonaws.com/user-service:${IMAGE_TAG}
+    image: 542551366580.dkr.ecr.ap-south-1.amazonaws.com/user-service:${IMAGE_TAG}
     container_name: user-service
     restart: unless-stopped
     environment:
@@ -31,7 +31,7 @@ services:
       - app-network
 
   product-service:
-    image: 542551366580.dkr.ecr.us-east-1.amazonaws.com/product-service:${IMAGE_TAG}
+    image: 542551366580.dkr.ecr.ap-south-1.amazonaws.com/product-service:${IMAGE_TAG}
     container_name: product-service
     restart: unless-stopped
     environment:
@@ -41,7 +41,7 @@ services:
       - app-network
 
   order-service:
-    image: 542551366580.dkr.ecr.us-east-1.amazonaws.com/order-service:${IMAGE_TAG}
+    image: 542551366580.dkr.ecr.ap-south-1.amazonaws.com/order-service:${IMAGE_TAG}
     container_name: order-service
     restart: unless-stopped
     environment:
