@@ -2,10 +2,10 @@ pipeline {
     agent any
 
     environment {
-        AWS_REGION     = 'us-east-1'
+        AWS_REGION     = 'ap-south-1'
         AWS_ACCOUNT_ID = '542551366580'
-        ECR_REGISTRY   = '542551366580.dkr.ecr.us-east-1.amazonaws.com'
-        EC2_IP         = '3.88.185.81'
+        ECR_REGISTRY   = '542551366580.dkr.ecr.ap-south-1.amazonaws.com'
+        EC2_IP         = '3.110.54.241'
         IMAGE_TAG      = "${BUILD_NUMBER}"
         SERVICES       = 'user-service product-service order-service'
     }
